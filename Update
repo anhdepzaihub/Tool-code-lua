@@ -1,0 +1,32 @@
+-- ==========================================
+-- ==========================================
+
+local function loadScriptFromServer()
+    -- Đường dẫn trực tiếp đến file code trên server của bạn (Ví dụ: GitHub Raw, Pastebin,...)
+    local url = "https://raw.githubusercontent.com/TaiKhoanCuaBan/TenRepo/main/main.lua"
+    
+    gg.toast("Đang kết nối tới server để cập nhật...")
+    
+    -- Gửi yêu cầu HTTP GET để lấy nội dung code mới nhất từ server
+    local response = gg.makeRequest(url)
+    
+    if not response or not response.content then
+        gg.alert("❌ Không thể kết nối tới server! Vui lòng kiểm tra lại kết nối mạng.")
+        return
+    end
+    
+    local remoteCode = response.content
+    
+    -- Kiểm tra xem code tải về có hợp lệ không
+    local chunk, err = load(remoteCode) or loadstring(remoteCode)
+    if not chunk then
+        gg.alert("❌ Lỗi biên dịch code từ server:\n" .. tostring(err))
+        return
+    end
+    
+    -- Thực thi đoạn code vừa tải về bộ nhớ RAM
+    return chunk()
+end
+
+-- Chạy loader
+loadScriptFromServer()
