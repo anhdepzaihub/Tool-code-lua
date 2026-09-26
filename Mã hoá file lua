@@ -1,0 +1,100 @@
+-- ==========================================
+-- ==========================================
+
+local function createSafeJunkLua()
+    -- 1. Hộp thoại nhập thông tin
+    local prompt = gg.prompt({
+        "Đường dẫn file Lua gốc cần bảo vệ:",
+        "Đường dẫn file đích (Giữ đuôi .lua):",
+        "Nhập Khóa bảo mật (Key):"
+    }, {
+        "/sdcard/Download/script.lua",
+        "/sdcard/Download/script_pro.lua",
+        "Key?"
+    }, {
+        "file", "text", "text"
+    })
+
+    if not prompt then 
+        gg.toast("Đã hủy thao tác.")
+        return 
+    end
+
+    local srcPath = prompt[1]
+    local dstPath = prompt[2]
+    local userKey = prompt[3]
+
+    if not dstPath:match("%.lua$") then
+        gg.alert("⚠️ Cảnh báo: Nên đặt đuôi file đích là .lua để Game Guardian nhận diện!")
+    end
+
+    -- 2. Đọc file gốc
+    local f = io.open(srcPath, "rb")
+    if not f then -- ĐÃ THÊM CHỮ "THEN" Ở ĐÂY ĐỂ KHẮC PHỤC LỖI
+        gg.alert("❌ Không tìm thấy file gốc tại:\n" .. srcPath)
+        return
+    end
+    local originalCode = f:read("*a")
+    f:close()
+
+    -- 3. Mã hóa code gốc thành payload an toàn
+    local encBytes = {}
+    local keyLen = #userKey
+    for i = 1, #originalCode do
+        local b = originalCode:byte(i)
+        local keyByte = userKey:byte(((i - 1) % keyLen) + 1)
+        local encByte = (b + keyByte + (i % 7)) % 256
+        table.insert(encBytes, string.char(encByte))
+    end
+    local payload = table.concat(encBytes)
+
+    -- Chuyển Key thành mảng số ASCII ngầm
+    local encodedKey = {}
+    for i = 1, #userKey do
+        table.insert(encodedKey, string.byte(userKey, i))
+    end
+
+    -- 4. Tạo phần header chứa ký tự rác trực quan (Hiển thị ô vuông/dấu hỏi trên mọi editor)
+    math.randomseed(os.time())
+    local junkChars = {}
+    for i = 1, 100 do
+        table.insert(junkChars, string.char(math.random(150, 255)))
+    end
+    local visualJunkHeader = "--[[" .. table.concat(junkChars) .. "]]\n"
+
+    -- 5. Logic giải mã và thực thi tinh gọn
+    local logicScript = string.format([[
+local k = {%s}
+local p = %q
+local r = {}
+for i = 1, #p do
+    local b = p:byte(i)
+    local kb = k[((i - 1) %% #k) + 1]
+    local orig = (b - kb - (i %% 7)) %% 256
+    if orig < 0 then orig = orig + 256 end
+    table.insert(r, string.char(orig))
+end
+local chunk, err = load(table.concat(r)) or loadstring(table.concat(r))
+if chunk then
+    return chunk()
+else
+    print("Lỗi giải mã: " .. tostring(err))
+end
+]], table.concat(encodedKey, ","), payload)
+
+    -- Ghép phần rác hiển thị bên ngoài với logic thực thi bên trong
+    local finalContent = visualJunkHeader .. logicScript
+
+    -- 6. Ghi ra file ở chế độ nhị phân ("wb")
+    local out = io.open(dstPath, "wb")
+    if not out then
+        gg.alert("❌ Không thể tạo file đích tại:\n" .. dstPath)
+        return
+    end
+    out:write(finalContent)
+    out:close()
+
+    gg.alert("✅ Tạo file thành công!\n\n- File lưu tại: " .. dstPath .. "\n- Trạng thái: Mở file ra bạn sẽ thấy các ký tự rác / ô vuông chằng chịt ở đầu file, chạy trên Game Guardian cực kỳ mượt mà!")
+end
+
+createSafeJunkLua()
