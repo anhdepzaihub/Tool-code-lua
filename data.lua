@@ -1,22 +1,12 @@
---[[
-╔══════════════════════════════════════════════════════════════╗
-║            ▓▓▓  AɴнDᴇᴘZᴀı SCRIPT V3  ▓▓▓                     ║
-║              HCR2 Cheat Menu (All Versions)                  ║
-║                                                              ║
-║    📢 Discord  :: Andepzai                                   ║
-║    📢 Telegram :: @Andepzai                                  ║
-║    📢 Youtube  :: @Andepzai                                  ║
-╚══════════════════════════════════════════════════════════════╝
-]]
+-- ============================================================
+--  AɴнDᴇᴘZᴀı SCRIPT V3 - HCR2 CHEAT MENU
+--  Fixed version - No syntax errors
+-- ============================================================
 
--- ═══════════════════════════════════════════════════════════
---  BIẾN TOÀN CỤC
--- ═══════════════════════════════════════════════════════════
 local ShowPrint = [[
 ╔══════════════════════════════════════════════════════════════╗
 ║            ▓▓▓  AɴнDᴇᴘZᴀı SCRIPT V3  ▓▓▓                     ║
 ║                  Thanks for using!                           ║
-║                                                              ║
 ║    📢 Discord  :: Andepzai                                   ║
 ║    📢 Telegram :: @Andepzai                                  ║
 ║    📢 Youtube  :: @Andepzai                                  ║
@@ -32,9 +22,6 @@ local BaseGameStatus = nil
 local BaseGameStatusRaw = nil
 local BaseRegion = nil
 
--- ═══════════════════════════════════════════════════════════
---  KIỂM TRA BAN ĐẦU
--- ═══════════════════════════════════════════════════════════
 local blockedApps = {
     "com.gushi.gtpcanary", "com.packagesniffer.frtparlak",
     "com.rhmsoft.edit", "app.greyshirts.sslcapture",
@@ -46,7 +33,7 @@ local function checkBlocked()
     gg.setVisible(false)
     for _, pkg in ipairs(blockedApps) do
         if gg.isPackageInstalled(pkg) then
-            gg.alert("⛔ Detected forbidden app!\n\n📦 " .. pkg)
+            gg.alert("⛔ Detected forbidden app!\n📦 " .. pkg)
             os.exit()
         end
     end
@@ -64,7 +51,7 @@ end
 local function checkHCR2()
     gg.setVisible(false)
     if gg.getTargetPackage() ~= "com.fingersoft.hcr2" then
-        gg.alert("❗ Please select HCR2 on top of Game Guardian!")
+        gg.alert("❗ Please select HCR2!")
         os.exit()
     end
 end
@@ -88,7 +75,7 @@ end
 local function getLib()
     local libs = gg.getRangesList("libcocos2dcpp.so")
     if #libs == 0 then
-        local c = gg.choice({"⏩ Continue", "❌ Exit"}, nil, "❗ Couldn't find libcocos2dcpp.so!")
+        local c = gg.choice({"⏩ Continue", "❌ Exit"}, nil, "❗ Couldn't find lib!")
         if c ~= 1 then os.exit() end
         return false
     end
@@ -110,7 +97,7 @@ local function selectRange()
     if not pick then os.exit() end
 
     if pick ~= 1 then
-        gg.alert("⚠️ Range này có thể không hoạt động tốt!\nVui lòng dùng C alloc.")
+        gg.alert("⚠️ Range này có thể không tốt!\nVui lòng dùng C alloc.")
     end
 
     RANGE_VALUE = ranges[pick].value
@@ -120,9 +107,6 @@ local function selectRange()
     gg.sleep(500)
 end
 
--- ═══════════════════════════════════════════════════════════
---  TÌM GAMESTATUS
--- ═══════════════════════════════════════════════════════════
 local function findGameStatus()
     local SEARCH_REGIONS = { gg.REGION_C_ALLOC, gg.REGION_OTHER }
     for _, region in ipairs(SEARCH_REGIONS) do
@@ -156,9 +140,6 @@ local function findGameStatus()
     return false
 end
 
--- ═══════════════════════════════════════════════════════════
---  HELPER
--- ═══════════════════════════════════════════════════════════
 local function readStringAt(addr, maxLen)
     maxLen = maxLen or 64
     local reads = {}
@@ -195,7 +176,7 @@ end
 
 local function checkGameStatus()
     if not BaseGameStatus or BaseGameStatus == 0 then
-        gg.alert("❌ Chưa scan được GameStatus!\n\n💡 Vào Garage (bấm 1 xe) rồi chạy lại script.")
+        gg.alert("❌ Chưa scan được GameStatus!\n💡 Vào Garage (bấm 1 xe) rồi chạy lại.")
         return false
     end
     return true
@@ -210,9 +191,6 @@ local function getOffsets()
     return VERSION_OFFSETS[v] or VERSION_OFFSETS["1.75"]
 end
 
--- ═══════════════════════════════════════════════════════════
---  HACK CƠ BẢN
--- ═══════════════════════════════════════════════════════════
 local noScrapState = false
 local function upgradeWithoutScrap()
     local choice = gg.choice({
@@ -230,7 +208,7 @@ local function upgradeWithoutScrap()
         gg.refineNumber("-0.6", gg.TYPE_FLOAT)
         local res = gg.getResults(gg.getResultsCount())
         if #res == 0 then
-            gg.alert("❌ Không tìm thấy! Vào garage trước.")
+            gg.alert("❌ Không tìm thấy!")
             return
         end
         gg.editAll("-999", gg.TYPE_FLOAT)
@@ -255,7 +233,6 @@ local function upgradeWithoutScrap()
     end
 end
 
--- FLY HACK
 local flyState = false
 local function flyHack()
     local choice = gg.choice({
@@ -303,7 +280,6 @@ local function flyHack()
     end
 end
 
--- UNLOCK VEHICLE
 local VEHICLES = {
     "HILL CLIMBER", "HILL CLIMBER Mk2", "MOTOCROSS BIKE", "MONSTER TRUCK",
     "TRACTOR", "DUNE BUGGY", "SPORTS CAR", "MOTOCROSS BIKE 2",
@@ -352,7 +328,7 @@ local function unlockAnyVehicle()
     end
     table.insert(menu, "⬅️ Quay lại")
 
-    local pick = gg.multiChoice(menu, nil, "☑️ Chọn nhiều xe để mở khóa")
+    local pick = gg.multiChoice(menu, nil, "☑️ Chọn nhiều xe")
     if not pick then return MainMenu() end
 
     local count = 0
@@ -367,11 +343,10 @@ local function unlockAnyVehicle()
     if count > 0 then
         gg.alert("✅ Đã mở khóa " .. count .. " xe!")
     else
-        gg.alert("❌ Không mở khóa được xe nào!")
+        gg.alert("❌ Không mở được xe nào!")
     end
 end
 
--- TRACKS EDITOR
 local function tracksEditor()
     local input = gg.prompt({
         "🗺️ Tên Map (VD: Countryside):",
@@ -388,7 +363,7 @@ local function tracksEditor()
     local doVerify  = input[4]
 
     if not mapName or mapName == "" or not curLength or not newLength then
-        gg.alert("❌ Nhập thiếu thông tin!")
+        gg.alert("❌ Nhập thiếu!")
         return
     end
 
@@ -396,14 +371,14 @@ local function tracksEditor()
     gg.setRanges(RANGE_VALUE)
     gg.searchNumber(":" .. mapName, gg.TYPE_BYTE)
     if gg.getResultsCount() == 0 then
-        gg.alert("❌ Không tìm thấy map: " .. mapName)
+        gg.alert("❌ Không tìm thấy map!")
         return
     end
 
     gg.refineNumber(string.byte(mapName:sub(1, 1)), gg.TYPE_BYTE)
     local results = gg.getResults(30)
     if #results == 0 then
-        gg.alert("⚠️ Refine thất bại!")
+        gg.alert("⚠️ Refine fail!")
         return
     end
 
@@ -433,9 +408,6 @@ local function tracksEditor()
     end
 end
 
--- ═══════════════════════════════════════════════════════════
---  VEHICLE HACKS
--- ═══════════════════════════════════════════════════════════
 local VehicleHacks = {
     f1  = { name = "Lowrider - Super Jumpshocks", search = 'Q 00 00 A0 "A" 00 80 40 66 66 06 41', replace = 'Q 00 00 A0 "A" 00 80 "@" 00 C8 41', state = false, results = nil },
     f2  = { name = "Hot Rod - Boost Hack", search = "4620693218774745088", replace = "4620693218877722624", state = false, results = nil },
@@ -523,9 +495,6 @@ local function vehicleHacksMenu()
     return vehicleHacksMenu()
 end
 
--- ═══════════════════════════════════════════════════════════
---  SHOP / CHEST
--- ═══════════════════════════════════════════════════════════
 local freeChestsFound = false
 local freeChestsOriginal = {}
 local function freeChests()
@@ -545,4 +514,54 @@ local function freeChests()
             local count = gg.getResultCount()
             if count == 0 then
                 gg.alert("❌ Không tìm thấy!")
-    
+                gg.setRanges(RANGE_VALUE)
+                return
+            end
+            local res = gg.getResults(count)
+            freeChestsOriginal = gg.getValues(res)
+            local newVals = {}
+            for i, v in ipairs(res) do
+                newVals[i] = { address = v.address, flags = v.flags, value = "0" }
+            end
+            gg.setValues(newVals)
+            freeChestsFound = true
+            gg.setRanges(RANGE_VALUE)
+            gg.alert("✅ Đã bật!")
+        else
+            gg.toast("✅ Đã bật rồi!")
+        end
+    elseif choice == 2 then
+        if freeChestsFound and #freeChestsOriginal > 0 then
+            gg.setValues(freeChestsOriginal)
+            freeChestsFound = false
+            gg.setRanges(RANGE_VALUE)
+            gg.alert("❌ Đã tắt!")
+        else
+            gg.alert("❌ Chưa bật!")
+        end
+    end
+end
+
+local function freePurchases()
+    local c = gg.choice({
+        "▶️ TIẾP TỤC",
+        "⬅️ Quay lại"
+    }, nil, "⚠️ Cần kết nối Google Play!\nĐang ở Shop của game?")
+
+    if c ~= 1 then return MainMenu() end
+
+    gg.clearResults()
+    gg.setRanges(RANGE_VALUE)
+    gg.searchNumber("7,234,820", gg.TYPE_DWORD)
+    local results = gg.getResults(100)
+    if #results == 0 then
+        gg.alert("❌ Không tìm thấy! Vào Shop trước.")
+        return
+    end
+
+    for _, v in ipairs(results) do
+        gg.clearResults()
+        gg.searchNumber(v.address, gg.TYPE_QWORD)
+        local ptrs = gg.getResults(100)
+        for _, vv in ipairs(ptrs) do
+            local val = gg.getValues({{ address = 
