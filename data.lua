@@ -1,27 +1,20 @@
 -- ============================================================
 --  AɴнDᴇᴘZᴀı SCRIPT V3 - HCR2 CHEAT MENU
---  Fixed version - No syntax errors
+--  Github: anhdepzaihub/Tool-code-lua
+--  Contact: Discord Andepzai | Telegram @Andepzai
 -- ============================================================
 
-local ShowPrint = [[
-╔══════════════════════════════════════════════════════════════╗
-║            ▓▓▓  AɴнDᴇᴘZᴀı SCRIPT V3  ▓▓▓                     ║
-║                  Thanks for using!                           ║
-║    📢 Discord  :: Andepzai                                   ║
-║    📢 Telegram :: @Andepzai                                  ║
-║    📢 Youtube  :: @Andepzai                                  ║
-╚══════════════════════════════════════════════════════════════╝
-]]
+-- Bien toan cuc
+LIB_BASE = nil
+archType = 0
+currentRange = nil
+RANGE_VALUE = nil
+gameVersion = nil
+BaseGameStatus = nil
+BaseGameStatusRaw = nil
+BaseRegion = nil
 
-local LIB_BASE = nil
-local archType = 0
-local currentRange = nil
-local RANGE_VALUE = nil
-local gameVersion = nil
-local BaseGameStatus = nil
-local BaseGameStatusRaw = nil
-local BaseRegion = nil
-
+-- Danh sach app bi chan
 local blockedApps = {
     "com.gushi.gtpcanary", "com.packagesniffer.frtparlak",
     "com.rhmsoft.edit", "app.greyshirts.sslcapture",
@@ -29,11 +22,14 @@ local blockedApps = {
     "io.neoterm", "com.foxcyber.gg", "sstool.only.com.sstool"
 }
 
+-- ============================================================
+--  KIEM TRA BAN DAU
+-- ============================================================
 local function checkBlocked()
     gg.setVisible(false)
     for _, pkg in ipairs(blockedApps) do
         if gg.isPackageInstalled(pkg) then
-            gg.alert("⛔ Detected forbidden app!\n📦 " .. pkg)
+            gg.alert("[!] Phat hien ung dung bi cam!\n" .. pkg)
             os.exit()
         end
     end
@@ -43,7 +39,7 @@ local function checkGG()
     gg.setVisible(false)
     local ok = pcall(function() gg.require("101.1", 16142) end)
     if not ok then
-        gg.alert("❌ Please use original Game Guardian 101.1!")
+        gg.alert("[!] Vui long dung Game Guardian 101.1!")
         os.exit()
     end
 end
@@ -51,7 +47,7 @@ end
 local function checkHCR2()
     gg.setVisible(false)
     if gg.getTargetPackage() ~= "com.fingersoft.hcr2" then
-        gg.alert("❗ Please select HCR2!")
+        gg.alert("[!] Vui long chon HCR2 tren Game Guardian!")
         os.exit()
     end
 end
@@ -75,7 +71,7 @@ end
 local function getLib()
     local libs = gg.getRangesList("libcocos2dcpp.so")
     if #libs == 0 then
-        local c = gg.choice({"⏩ Continue", "❌ Exit"}, nil, "❗ Couldn't find lib!")
+        local c = gg.choice({"[1] Tiep tuc", "[2] Thoat"}, nil, "Khong tim thay libcocos2dcpp.so!")
         if c ~= 1 then os.exit() end
         return false
     end
@@ -86,27 +82,30 @@ end
 local function selectRange()
     gg.setVisible(false)
     local ranges = {
-        { name = "C alloc", value = gg.REGION_C_ALLOC },
-        { name = "C data",  value = gg.REGION_C_DATA },
-        { name = "Other",   value = gg.REGION_OTHER }
+        { name = "[1] C alloc (KHUYEN NGHI)", value = gg.REGION_C_ALLOC },
+        { name = "[2] C data",  value = gg.REGION_C_DATA },
+        { name = "[3] Other",   value = gg.REGION_OTHER }
     }
     local labels = {}
     for _, r in ipairs(ranges) do table.insert(labels, r.name) end
 
-    local pick = gg.choice(labels, 0, "🧭 Chọn vùng nhớ (khuyến nghị C alloc)")
+    local pick = gg.choice(labels, 0, "Chon vung nho (khuyen nghi C alloc)")
     if not pick then os.exit() end
 
     if pick ~= 1 then
-        gg.alert("⚠️ Range này có thể không tốt!\nVui lòng dùng C alloc.")
+        gg.alert("[!] Range nay co the khong hoat dong tot!\nVui long dung C alloc.")
     end
 
     RANGE_VALUE = ranges[pick].value
-    currentRange = ranges[pick].name
+    currentRange = ranges[pick].name:gsub("%[%d%] ", "")
     gg.setRanges(RANGE_VALUE)
-    gg.toast("✅ Range: " .. currentRange)
+    gg.toast("Range: " .. currentRange)
     gg.sleep(500)
 end
 
+-- ============================================================
+--  TIM GAMESTATUS
+-- ============================================================
 local function findGameStatus()
     local SEARCH_REGIONS = { gg.REGION_C_ALLOC, gg.REGION_OTHER }
     for _, region in ipairs(SEARCH_REGIONS) do
@@ -140,6 +139,9 @@ local function findGameStatus()
     return false
 end
 
+-- ============================================================
+--  HELPER
+-- ============================================================
 local function readStringAt(addr, maxLen)
     maxLen = maxLen or 64
     local reads = {}
@@ -176,7 +178,7 @@ end
 
 local function checkGameStatus()
     if not BaseGameStatus or BaseGameStatus == 0 then
-        gg.alert("❌ Chưa scan được GameStatus!\n💡 Vào Garage (bấm 1 xe) rồi chạy lại.")
+        gg.alert("[!] Chua scan duoc GameStatus!\nVao Garage (bam 1 xe) roi chay lai.")
         return false
     end
     return true
@@ -186,18 +188,23 @@ local VERSION_OFFSETS = {
     ["1.74"] = { freezeDiamond = 0x21CC3F4, vnpStats = 0x1FBE5A0 },
     ["1.75"] = { freezeDiamond = 0x22049C4, vnpStats = 0x2060CA0 },
 }
+
 local function getOffsets()
     local v = gameVersion and gameVersion:match("^(%d+%.%d+)")
     return VERSION_OFFSETS[v] or VERSION_OFFSETS["1.75"]
 end
 
+-- ============================================================
+--  FEATURE 1: UPGRADE PARTS WITHOUT SCRAP
+-- ============================================================
 local noScrapState = false
+
 local function upgradeWithoutScrap()
     local choice = gg.choice({
-        "🟢 Bật Upgrade Without Scrap",
-        "🔴 Tắt Upgrade Without Scrap",
-        "⬅️ Quay lại"
-    }, nil, "Trạng thái: " .. (noScrapState and "🟢 ON" or "🔴 OFF"))
+        "[1] BAT Upgrade Without Scrap",
+        "[2] TAT Upgrade Without Scrap",
+        "[3] Quay lai"
+    }, nil, "Trang thai: " .. (noScrapState and "BAT" or "TAT"))
 
     if not choice or choice == 3 then return MainMenu() end
 
@@ -208,16 +215,16 @@ local function upgradeWithoutScrap()
         gg.refineNumber("-0.6", gg.TYPE_FLOAT)
         local res = gg.getResults(gg.getResultsCount())
         if #res == 0 then
-            gg.alert("❌ Không tìm thấy!")
+            gg.alert("Khong tim thay! Vao garage truoc.")
             return
         end
         gg.editAll("-999", gg.TYPE_FLOAT)
         gg.clearResults()
         noScrapState = true
-        gg.alert("✅ Đã bật!")
+        gg.alert("Da bat Upgrade Without Scrap!")
     elseif choice == 2 then
         if not noScrapState then
-            gg.alert("❌ Chưa bật!")
+            gg.alert("Chua bat!")
             return
         end
         gg.clearResults()
@@ -228,18 +235,22 @@ local function upgradeWithoutScrap()
         if #res > 0 then
             gg.editAll("-0.60000002384", gg.TYPE_FLOAT)
             noScrapState = false
-            gg.alert("❌ Đã tắt!")
+            gg.alert("Da tat!")
         end
     end
 end
 
+-- ============================================================
+--  FEATURE 2: FLY HACK
+-- ============================================================
 local flyState = false
+
 local function flyHack()
     local choice = gg.choice({
-        "🟢 Bật Fly Hack",
-        "🔴 Tắt Fly Hack",
-        "⬅️ Quay lại"
-    }, nil, "Trạng thái: " .. (flyState and "🟢 ON" or "🔴 OFF"))
+        "[1] BAT Fly Hack",
+        "[2] TAT Fly Hack",
+        "[3] Quay lai"
+    }, nil, "Trang thai: " .. (flyState and "BAT" or "TAT"))
 
     if not choice or choice == 3 then return MainMenu() end
 
@@ -257,14 +268,14 @@ local function flyHack()
         if #res > 0 then
             gg.editAll("-1.2", gg.TYPE_FLOAT)
             flyState = true
-            gg.alert("✅ Đã bật!")
+            gg.alert("Da bat Fly Hack!")
         else
-            gg.alert("❌ Không tìm thấy!")
+            gg.alert("Khong tim thay!")
         end
         gg.setRanges(RANGE_VALUE)
     elseif choice == 2 then
         if not flyState then
-            gg.alert("❌ Chưa bật!")
+            gg.alert("Chua bat!")
             return
         end
         gg.clearResults()
@@ -274,12 +285,15 @@ local function flyHack()
         if #res > 0 then
             gg.editAll("0.08", gg.TYPE_FLOAT)
             flyState = false
-            gg.alert("❌ Đã tắt!")
+            gg.alert("Da tat!")
         end
         gg.setRanges(RANGE_VALUE)
     end
 end
 
+-- ============================================================
+--  FEATURE 3: UNLOCK ANY VEHICLE
+-- ============================================================
 local VEHICLES = {
     "HILL CLIMBER", "HILL CLIMBER Mk2", "MOTOCROSS BIKE", "MONSTER TRUCK",
     "TRACTOR", "DUNE BUGGY", "SPORTS CAR", "MOTOCROSS BIKE 2",
@@ -323,12 +337,12 @@ end
 
 local function unlockAnyVehicle()
     local menu = {}
-    for _, v in ipairs(VEHICLES) do
-        table.insert(menu, "🚗 " .. v)
+    for i, v in ipairs(VEHICLES) do
+        table.insert(menu, "[" .. i .. "] " .. v)
     end
-    table.insert(menu, "⬅️ Quay lại")
+    table.insert(menu, "[0] Quay lai")
 
-    local pick = gg.multiChoice(menu, nil, "☑️ Chọn nhiều xe")
+    local pick = gg.multiChoice(menu, nil, "Chon nhieu xe de mo khoa")
     if not pick then return MainMenu() end
 
     local count = 0
@@ -341,18 +355,21 @@ local function unlockAnyVehicle()
     end
 
     if count > 0 then
-        gg.alert("✅ Đã mở khóa " .. count .. " xe!")
+        gg.alert("Da mo khoa " .. count .. " xe!")
     else
-        gg.alert("❌ Không mở được xe nào!")
+        gg.alert("Khong mo khoa duoc xe nao!")
     end
 end
 
+-- ============================================================
+--  FEATURE 4: TRACKS EDITOR
+-- ============================================================
 local function tracksEditor()
     local input = gg.prompt({
-        "🗺️ Tên Map (VD: Countryside):",
-        "📏 Độ dài hiện tại (m):",
-        "📐 Độ dài mới (m):",
-        "✅ Enable Verify"
+        "Ten Map (VD: Countryside):",
+        "Do dai hien tai (m):",
+        "Do dai moi (m):",
+        "Enable Verify"
     }, {"", "", "", true}, {"text", "number", "number", "checkbox"})
 
     if not input then return MainMenu() end
@@ -363,7 +380,7 @@ local function tracksEditor()
     local doVerify  = input[4]
 
     if not mapName or mapName == "" or not curLength or not newLength then
-        gg.alert("❌ Nhập thiếu!")
+        gg.alert("Nhap thieu thong tin!")
         return
     end
 
@@ -371,14 +388,14 @@ local function tracksEditor()
     gg.setRanges(RANGE_VALUE)
     gg.searchNumber(":" .. mapName, gg.TYPE_BYTE)
     if gg.getResultsCount() == 0 then
-        gg.alert("❌ Không tìm thấy map!")
+        gg.alert("Khong tim thay map: " .. mapName)
         return
     end
 
     gg.refineNumber(string.byte(mapName:sub(1, 1)), gg.TYPE_BYTE)
     local results = gg.getResults(30)
     if #results == 0 then
-        gg.alert("⚠️ Refine fail!")
+        gg.alert("Refine that bai!")
         return
     end
 
@@ -402,12 +419,15 @@ local function tracksEditor()
     end
 
     if patched > 0 then
-        gg.alert("✅ Đã patch " .. patched .. " entries!")
+        gg.alert("Da patch " .. patched .. " entries!")
     else
-        gg.alert("❌ Không match!")
+        gg.alert("Khong match!")
     end
 end
 
+-- ============================================================
+--  FEATURE 5: VEHICLE HACKS
+-- ============================================================
 local VehicleHacks = {
     f1  = { name = "Lowrider - Super Jumpshocks", search = 'Q 00 00 A0 "A" 00 80 40 66 66 06 41', replace = 'Q 00 00 A0 "A" 00 80 "@" 00 C8 41', state = false, results = nil },
     f2  = { name = "Hot Rod - Boost Hack", search = "4620693218774745088", replace = "4620693218877722624", state = false, results = nil },
@@ -429,10 +449,10 @@ local function toggleVehicleHack(key)
     if not data then return end
 
     local choice = gg.choice({
-        "🟢 BẬT",
-        "🔴 TẮT",
-        "⬅️ Quay lại"
-    }, nil, "🔧 " .. data.name .. "\nTrạng thái: " .. (data.state and "🟢 ON" or "🔴 OFF"))
+        "[1] BAT",
+        "[2] TAT",
+        "[3] Quay lai"
+    }, nil, data.name .. "\nTrang thai: " .. (data.state and "BAT" or "TAT"))
 
     if not choice or choice == 3 then return end
 
@@ -453,22 +473,22 @@ local function toggleVehicleHack(key)
         end
         local count = gg.getResultsCount()
         if count == 0 then
-            gg.alert("❌ Không tìm thấy! Vào xe này trước.")
+            gg.alert("Khong tim thay! Vao xe nay truoc.")
         else
             local results = gg.getResults(count)
             data.results = gg.getValues(results)
             gg.editAll(data.replace, vType)
             data.state = true
             gg.clearResults()
-            gg.toast("✅ Đã bật: " .. data.name)
+            gg.toast("Da bat: " .. data.name)
         end
     elseif choice == 2 then
         if data.results then
             gg.setValues(data.results)
             data.state = false
-            gg.toast("❌ Đã tắt: " .. data.name)
+            gg.toast("Da tat: " .. data.name)
         else
-            gg.alert("❌ Chưa bật!")
+            gg.alert("Chua bat!")
         end
     end
 end
@@ -482,27 +502,31 @@ local function vehicleHacksMenu()
 
     for _, k in ipairs(keys) do
         local v = VehicleHacks[k]
-        local st = v.state and "🟢" or "⚫"
-        table.insert(labels, st .. " " .. n .. ". " .. v.name)
+        local st = v.state and "[ON]" or "[OFF]"
+        table.insert(labels, "[" .. n .. "] " .. st .. " " .. v.name)
         n = n + 1
     end
-    table.insert(labels, "⬅️ Quay lại")
+    table.insert(labels, "[0] Quay lai")
 
-    local pick = gg.choice(labels, nil, nil)
+    local pick = gg.choice(labels, nil, "Chon xe de bat/tat hack")
     if not pick or pick == #labels then return MainMenu() end
 
     toggleVehicleHack(keys[pick])
     return vehicleHacksMenu()
 end
 
+-- ============================================================
+--  FEATURE 6: FREE CHESTS
+-- ============================================================
 local freeChestsFound = false
 local freeChestsOriginal = {}
+
 local function freeChests()
     local choice = gg.choice({
-        "🟢 Bật Free Chests",
-        "🔴 Tắt Free Chests",
-        "⬅️ Quay lại"
-    }, nil, "Trạng thái: " .. (freeChestsFound and "🟢 ON" or "🔴 OFF"))
+        "[1] BAT Free Chests",
+        "[2] TAT Free Chests",
+        "[3] Quay lai"
+    }, nil, "Trang thai: " .. (freeChestsFound and "BAT" or "TAT"))
 
     if not choice or choice == 3 then return MainMenu() end
 
@@ -513,7 +537,7 @@ local function freeChests()
             gg.searchNumber("0.1", gg.TYPE_FLOAT)
             local count = gg.getResultCount()
             if count == 0 then
-                gg.alert("❌ Không tìm thấy!")
+                gg.alert("Khong tim thay!")
                 gg.setRanges(RANGE_VALUE)
                 return
             end
@@ -525,43 +549,4 @@ local function freeChests()
             end
             gg.setValues(newVals)
             freeChestsFound = true
-            gg.setRanges(RANGE_VALUE)
-            gg.alert("✅ Đã bật!")
-        else
-            gg.toast("✅ Đã bật rồi!")
-        end
-    elseif choice == 2 then
-        if freeChestsFound and #freeChestsOriginal > 0 then
-            gg.setValues(freeChestsOriginal)
-            freeChestsFound = false
-            gg.setRanges(RANGE_VALUE)
-            gg.alert("❌ Đã tắt!")
-        else
-            gg.alert("❌ Chưa bật!")
-        end
-    end
-end
-
-local function freePurchases()
-    local c = gg.choice({
-        "▶️ TIẾP TỤC",
-        "⬅️ Quay lại"
-    }, nil, "⚠️ Cần kết nối Google Play!\nĐang ở Shop của game?")
-
-    if c ~= 1 then return MainMenu() end
-
-    gg.clearResults()
-    gg.setRanges(RANGE_VALUE)
-    gg.searchNumber("7,234,820", gg.TYPE_DWORD)
-    local results = gg.getResults(100)
-    if #results == 0 then
-        gg.alert("❌ Không tìm thấy! Vào Shop trước.")
-        return
-    end
-
-    for _, v in ipairs(results) do
-        gg.clearResults()
-        gg.searchNumber(v.address, gg.TYPE_QWORD)
-        local ptrs = gg.getResults(100)
-        for _, vv in ipairs(ptrs) do
-            local val = gg.getValues({{ address = 
+            gg.setRanges(RANG
