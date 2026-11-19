@@ -1,59 +1,30 @@
-<!-- ═══════════════════════════════════════════════════════════ -->
-<!--              🚀 ANHDEPZAI — VIP README EDITION              -->
-<!-- ═══════════════════════════════════════════════════════════ -->
-
+<!-- Banner Sóng Lượn Động -->
 <div align="center">
-
-<!-- 🌊 1. BANNER SÓNG ĐỘNG (twinkling animation) -->
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0ea5e9,50:6366f1,100:ec4899&height=200&section=header&text=ANHDEPZAI&fontSize=68&fontColor=ffffff&fontAlignY=38&desc=Developer%20%7C%20Scripter%20%7C%20Vietnam&descAlignY=66&descSize=18&animation=twinkling" width="100%" />
-
-<!-- ⌨️ 2. TYPEWRITER ĐA DÒNG (đánh máy + xóa + lặp) -->
-<a href="https://git.io/typing-svg">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&duration=2500&pause=800&color=38BDF8&center=true&vCenter=true&multiline=true&width=600&height=90&lines=%3E+LOADING+ANHDEPZAI...;%3E+INITIALIZING+CORE+MODULES...;%3E+STATUS%3A+ONLINE+%E2%9C%94" alt="Typing SVG" />
-</a>
-
-<!-- ✨ 3. NEON BADGES (phát sáng) -->
-<p>
-  <img src="https://img.shields.io/badge/STATUS-ONLINE-22c55e?style=for-the-badge&logo=statuspage&logoColor=white&labelColor=0d1117" />
-  <img src="https://img.shields.io/badge/LOCATION-VIETNAM-da251e?style=for-the-badge&logo=googlemaps&logoColor=white&labelColor=0d1117" />
-  <img src="https://img.shields.io/badge/ROLE-DEVELOPER-6366f1?style=for-the-badge&logo=visualstudiocode&logoColor=white&labelColor=0d1117" />
-  <img src="https://img.shields.io/badge/COFFEE-%E2%88%9E-6f4e37?style=for-the-badge&logo=buymeacoffee&logoColor=white&labelColor=0d1117" />
-</p>
-
-<!-- 👁️ 4. ĐẾM VIEW + FOLLOW + STAR (số động) -->
-<p>
-  <img src="https://komarev.com/ghpvc/?username=anhdepzai&label=PROFILE+VIEWS&color=0ea5e9&style=for-the-badge" />
-  <img src="https://img.shields.io/github/followers/anhdepzai?label=FOLLOWERS&style=for-the-badge&color=6366f1&logo=github&labelColor=0d1117" />
-  <img src="https://img.shields.io/github/stars/anhdepzai?label=STARS&style=for-the-badge&color=ec4899&logo=github&labelColor=0d1117" />
-</p>
-
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:00f2fe,50:4facfe,100:ff007f&height=200&section=header&text=ANHDEPZAI%20🇻🇳&fontSize=55&fontColor=ffffff&animation=twinkling&fontAlignY=38&desc=Lua%20Developer%20|%20Reverse%20Engineer%20|%20Web%20Creator&descAlignY=62&descSize=18" width="100%" />
 </div>
 
----
-
-<!-- 🐍 5. SNAKE ANIMATION (rắn ăn contribution) -->
+<!-- Hiệu Ứng Chữ Gõ Tự Động (Typing SVG) -->
 <div align="center">
-  <h2>🐍 Contribution Snake</h2>
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/anhdepzai/anhdepzai/output/github-contribution-grid-snake-dark.svg" />
-    <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/anhdepzai/anhdepzai/output/github-contribution-grid-snake.svg" />
-    <img alt="snake" src="https://raw.githubusercontent.com/anhdepzai/anhdepzai/output/github-contribution-grid-snake-dark.svg" width="100%" />
-  </picture>
+  <a href="https://github.com/anhdepzai360">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=22&duration=3000&pause=1000&color=00F7FF&center=true&vCenter=true&width=650&lines=Xin+ch%C3%A0o!+M%C3%ACnh+l%C3%A0+ANHDEPZAI+%F0%9F%87%BB%F0%9F%87%B3;Chuy%C3%AAn+Lua%2C+Luau+%26+GameGuardian+Scripts;Memory+Patching+%26+Bytecode+Obfuscation;X%C3%A2y+d%E1%BB%B1ng+UI+Cyberpunk+%26+Web+Hi%E1%BB%87u+%E1%BB%A8ng" alt="Typing SVG" />
+  </a>
 </div>
 
----
+<p align="center">
+  <img src="https://komarev.com/ghpvc/?username=anhdepzai360&label=L%C6%B0%E1%BB%A3t+Xem&color=00f7ff&style=for-the-badge" alt="Profile Views" />
+  <img src="https://img.shields.io/badge/Location-TP.%20H%E1%BB%93%20Ch%C3%AD%20Minh%2C%20VN-ff007f?style=for-the-badge&logo=googlemaps&logoColor=white" />
+  <img src="https://img.shields.io/badge/Status-Coding%2024%2F7-00ff88?style=for-the-badge" />
+</p>
 
-<!-- 💻 6. CODE BLOCK ĐỘNG (typing trong code) -->
-<div align="center">
+<!-- Đường Kẻ Phân Cách RGB Động -->
+<img src="https://user-images.githubusercontent.com/73097560/115834477-dbab4500-a447-11eb-908a-139a6edaec5c.gif" width="100%">
 
-<h2>⚡ About Me</h2>
+### ⚡ Giới Thiệu Bản Thân
 
-```ts
-const anhdepzai = {
-    role:       "Developer & Scripter",
-    location:   "Vietnam 🇻🇳",
-    languages:  ["JavaScript", "Python", "Lua", "TypeScript"],
-    focus:      ["Automation", "Bots", "Web Dev", "Scripting"],
-    motto:      "Code sạch – Sống chất – Chạy nhanh 🚀",
-    status:     "ONLINE ✔"
-};
+```text
+╔══════════════════════════════════════════════════════════════════╗
+║  👤 Dev Handle : ANHDEPZAI 🇻🇳 | anh2k9VN | ꧁AɴнDᴇᴘZᴀı꧂           ║
+║  📍 Khu Vực    : TP. Hồ Chí Minh, Việt Nam (UTC+7)               ║
+║  🛠️ Chuyên Môn : Lua / Luau Scripting, Reverse Engineering       ║
+║  🎮 Lĩnh Vực   : GameGuardian, Roblox Exploits, Python & Web UI  ║
+╚══════════════════════════════════════════════════════════════════╝
